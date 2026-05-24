@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} feature engineering.
+Credit Risk Default feature engineering.
 
 Each function takes a DataFrame and returns a DataFrame with new columns added.
 Functions never drop existing columns — dropping happens in data_pipeline.py.
@@ -20,7 +20,7 @@ def add_temporal_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Extract time-based signals from the transaction/event timestamp.
 
-    Domain rationale: TODO — explain why time matters for {{PROJECT_NAME}}.
+    Domain rationale: TODO — explain why time matters for Credit Risk Default.
 
     TODO: update "date_col" to the actual datetime column name.
     """
@@ -45,7 +45,7 @@ def add_aggregation_features(df: pd.DataFrame) -> pd.DataFrame:
     Leakage warning: if using rolling windows, ensure only PAST rows are used.
     Sort by the time column before computing and use expanding or shift(1).
 
-    TODO: implement for {{PROJECT_NAME}}.
+    TODO: implement for Credit Risk Default.
     """
     df = df.copy()
 
@@ -67,7 +67,7 @@ def add_deviation_features(df: pd.DataFrame) -> pd.DataFrame:
 
     Domain rationale: TODO — explain what anomaly this captures.
 
-    TODO: implement for {{PROJECT_NAME}}.
+    TODO: implement for Credit Risk Default.
     """
     df = df.copy()
 
@@ -81,7 +81,7 @@ def add_deviation_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def add_domain_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Project-specific features unique to {{PROJECT_NAME}}.
+    Project-specific features unique to Credit Risk Default.
 
     TODO: add the features that are specific to this domain.
     These are the features that make this project distinct from others.

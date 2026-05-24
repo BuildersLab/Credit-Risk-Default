@@ -1,4 +1,4 @@
-# Model Card: {{PROJECT_NAME}} Champion Model
+# Model Card: Credit Risk Default Champion Model
 
 > Fill in TBD fields after the Week 8 modeling milestone.
 
@@ -8,21 +8,21 @@
 |---|---|
 | Model type | XGBoost binary classifier (update if different) |
 | Version | v0.1 |
-| Trained by | {{TEAM_DS}} |
+| Trained by | Bintou Ba, Marienne Dosso, Lynda Allepo |
 | Date trained | TBD |
 | Framework | XGBoost 2.0 + scikit-learn 1.4 |
 
 ## Intended use
 
-**Primary use:** TODO — describe what the model predicts and who uses it at {{COMPANY_NAME}}.
-**Primary users:** {{PERSONA}}
+**Primary use:** TODO — describe what the model predicts and who uses it at NorthBay Bank TBD.
+**Primary users:** Credit Analyst
 **Out-of-scope uses:** TODO — list uses this model should not be applied to.
 
 ## Training data
 
 See `data/DATA_CARD.md`.
 
-- Dataset: {{DATASET_NAME}}
+- Dataset: Credit risk data - TBD
 - Train period / split: TODO
 - Features: TODO (number of engineered features)
 
@@ -30,7 +30,7 @@ See `data/DATA_CARD.md`.
 
 | Metric | Value |
 |---|---|
-| {{PRIMARY_METRIC}} | TBD |
+| PR-AUC | TBD |
 | Recall at threshold | TBD |
 | Precision at threshold | TBD |
 | False positives per 1,000 negatives | TBD |
@@ -44,7 +44,7 @@ See `data/DATA_CARD.md`.
 ## Explainability
 
 SHAP values are computed for every prediction. See `notebooks/04_explainability.ipynb`.
-The Gemini API translates SHAP output into plain English for {{PERSONA}}.
+The Gemini API translates SHAP output into plain English for Credit Analyst.
 Gemini output is advisory only. The model score is the authoritative decision.
 
 ## Bias evaluation

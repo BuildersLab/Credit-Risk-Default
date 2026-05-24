@@ -1,12 +1,12 @@
-# Setup Guide: {{PROJECT_NAME}}
+# Setup Guide: Credit Risk Default
 
 Follow these steps to go from a fresh clone to a running local environment.
 
 ## 1. Clone and install
 
 ```bash
-git clone https://github.com/builderslab/{{PROJECT_SLUG}}.git
-cd {{PROJECT_SLUG}}
+git clone https://github.com/builderslab/Credit-Risk-Default.git
+cd Credit-Risk-Default
 make setup
 ```
 
@@ -30,7 +30,7 @@ Open `.env` and fill in:
 
 ## 3. Download the dataset
 
-Download {{DATASET_NAME}} from {{DATASET_URL}} and place files in `data/raw/`.
+Download Credit risk data - TBD from URL - TBD and place files in `data/raw/`.
 
 See `data/DATA_CARD.md` for the expected file names and schema.
 

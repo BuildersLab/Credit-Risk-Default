@@ -1,1 +1,1 @@
-"""{{PROJECT_NAME}}: {{PROJECT_DESCRIPTION}}"""
+"""Credit Risk Default: Build an explainable machine learning credit risk platform for NorthBay Bank that predicts credit card account defaults using behavioural repayment patterns, assists credit officers through an interactive review dashboard, and enables early intervention to reduce financial losses while minimizing unnecessary customer flags."""

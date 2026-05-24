@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} model evaluation.
+Credit Risk Default model evaluation.
 
 Produces metrics framed as business impact.
 The summary sentence from this module is used in the final demo presentation.
@@ -48,8 +48,8 @@ def compute_business_metrics(
     transaction amount, crop yield). Used to compute dollar/unit impact.
     If None, falls back to count-based metrics only.
 
-    TODO: update the summary_sentence template to match the {{PROJECT_NAME}} framing.
-    The sentence should answer: what does this model save or catch for {{COMPANY_NAME}}?
+    TODO: update the summary_sentence template to match the Credit Risk Default framing.
+    The sentence should answer: what does this model save or catch for NorthBay Bank TBD?
     """
     y_pred = (y_prob >= threshold).astype(int)
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
@@ -59,7 +59,7 @@ def compute_business_metrics(
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     fp_per_1000 = (fp / max((y_true == 0).sum(), 1)) * 1000
 
-    # TODO: replace with {{PROJECT_NAME}}-specific business framing
+    # TODO: replace with Credit Risk Default-specific business framing
     # Example for fraud: dollar value of fraud caught
     # Example for credit risk: expected loss avoided
     # Example for yield: tonnes of crop yield predicted accurately
@@ -71,7 +71,7 @@ def compute_business_metrics(
         caught_value = float(tp)
         pct_value_caught = recall * 100
 
-    # TODO: update this sentence for {{PROJECT_NAME}}
+    # TODO: update this sentence for Credit Risk Default
     summary_sentence = (
         f"At the {threshold:.0%} threshold, the model achieves "
         f"{recall:.1%} recall and {precision:.1%} precision, "
@@ -93,9 +93,9 @@ def compute_business_metrics(
 
 def print_report(metrics: dict) -> None:
     print("\n" + "=" * 60)
-    print(f"{{PROJECT_NAME}} MODEL EVALUATION REPORT")
+    print(f"Credit Risk Default MODEL EVALUATION REPORT")
     print("=" * 60)
-    print(f"\n{{PRIMARY_METRIC}}:              {metrics['pr_auc']:.4f}")
+    print(f"\nPR-AUC:              {metrics['pr_auc']:.4f}")
     print(f"Recall:                {metrics['recall']:.4f}")
     print(f"Precision:             {metrics['precision']:.4f}")
     print(f"Operating threshold:   {metrics['threshold']:.2f}")

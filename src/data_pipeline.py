@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} data pipeline.
+Credit Risk Default data pipeline.
 
 Loads raw data, cleans, encodes, and writes processed Parquet files.
 Run via: make data  or  python -m src.data_pipeline
@@ -26,7 +26,7 @@ def load_raw(data_dir: Path = DATA_DIR) -> pd.DataFrame:
     """
     Load raw data file(s) from data/raw/.
 
-    TODO: replace with the actual filename(s) for {{DATASET_NAME}}.
+    TODO: replace with the actual filename(s) for Credit risk data - TBD.
     If multiple files need merging (e.g. transactions + identity),
     do the merge here and return a single DataFrame.
     """
@@ -102,7 +102,7 @@ def split(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     # from sklearn.model_selection import train_test_split
     # train, val = train_test_split(df, test_size=0.2, stratify=df["target"], random_state=42)
 
-    raise NotImplementedError("TODO: implement split() for {{PROJECT_NAME}}")
+    raise NotImplementedError("TODO: implement split() for Credit Risk Default")
 
 
 def run_pipeline(

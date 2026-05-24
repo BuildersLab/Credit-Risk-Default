@@ -1,9 +1,9 @@
-# Data Card: {{DATASET_NAME}}
+# Data Card: Credit risk data - TBD
 
 ## Source
 
-- **Name:** {{DATASET_NAME}}
-- **URL:** {{DATASET_URL}}
+- **Name:** Credit risk data - TBD
+- **URL:** URL - TBD
 - **License:** TODO
 - **Coverage:** TODO (date range, geography, population)
 

@@ -15,7 +15,7 @@ def render():
     c1, c2, c3 = st.columns(3)
     c1.metric("Flagged", len(flagged))
     c2.metric("Actioned", len(actions))
-    # TODO: add a business value metric for {{PROJECT_NAME}}
+    # TODO: add a business value metric for Credit Risk Default
     c3.metric("Avg risk score", f"{sum(r.get('pred_prob',0) for r in flagged)/max(len(flagged),1):.1%}")
 
     st.divider()
@@ -41,12 +41,12 @@ def render():
     st.divider()
 
     st.subheader("Stakeholder report")
-    st.caption("Executive summary for {{COMPANY_NAME}} leadership.")
+    st.caption("Executive summary for NorthBay Bank TBD leadership.")
 
     if st.button("Generate report", type="primary"):
         try:
             from src.gemini import generate_report
-            # TODO: populate metrics from actual session data for {{PROJECT_NAME}}
+            # TODO: populate metrics from actual session data for Credit Risk Default
             metrics = st.session_state.get("session_metrics", {})
             with st.spinner("Generating report..."):
                 report = generate_report(
@@ -63,6 +63,6 @@ def render():
         st.download_button(
             "Download report",
             data=st.session_state.stakeholder_report,
-            file_name="{{PROJECT_SLUG}}_report.txt",
+            file_name="Credit-Risk-Default_report.txt",
             mime="text/plain",
         )

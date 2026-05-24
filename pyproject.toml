@@ -1,7 +1,7 @@
 [project]
-name = "{{PROJECT_SLUG}}"
+name = "Credit-Risk-Default"
 version = "0.1.0"
-description = "{{PROJECT_DESCRIPTION}}"
+description = "Build an explainable machine learning credit risk platform for NorthBay Bank that predicts credit card account defaults using behavioural repayment patterns, assists credit officers through an interactive review dashboard, and enables early intervention to reduce financial losses while minimizing unnecessary customer flags."
 requires-python = ">=3.11"
 dependencies = [
     "pandas>=2.0",

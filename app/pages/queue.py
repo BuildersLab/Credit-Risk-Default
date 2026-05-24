@@ -2,9 +2,9 @@
 Review Queue page.
 
 Shows flagged records sorted by prediction score.
-{{PERSONA}} clicks a row to open it in Case Review.
+Credit Analyst clicks a row to open it in Case Review.
 
-TODO: update column references and display fields for {{PROJECT_NAME}}.
+TODO: update column references and display fields for Credit Risk Default.
 
 Owner(s):
 """
@@ -29,7 +29,7 @@ def render():
     col1, col2, col3 = st.columns(3)
     col1.metric("Total flagged", len(df))
     col2.metric("High score", len(df[df["score_tier"] == "High"]))
-    # TODO: update "pred_prob" and value column for {{PROJECT_NAME}}
+    # TODO: update "pred_prob" and value column for Credit Risk Default
     col3.metric("Avg prediction score", f"{df['pred_prob'].mean():.1%}")
 
     st.divider()
@@ -39,7 +39,7 @@ def render():
     for _, row in df_sorted.iterrows():
         with st.container():
             c1, c2, c3, c4 = st.columns([3, 1, 1, 1])
-            # TODO: update display fields for {{PROJECT_NAME}}
+            # TODO: update display fields for Credit Risk Default
             c1.markdown(f"Record `{row.get('id', _)}`")
             c2.markdown(f"{row.get('pred_prob', 0):.1%}")
             with c3:

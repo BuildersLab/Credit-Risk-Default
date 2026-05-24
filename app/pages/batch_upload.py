@@ -47,7 +47,7 @@ def render():
                 st.download_button(
                     "Download scored results",
                     data=scored.to_csv(index=False).encode(),
-                    file_name="{{PROJECT_SLUG}}_scored.csv",
+                    file_name="Credit-Risk-Default_scored.csv",
                     mime="text/csv",
                 )
         except Exception as e:

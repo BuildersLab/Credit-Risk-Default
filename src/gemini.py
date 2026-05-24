@@ -1,11 +1,11 @@
 """
-{{PROJECT_NAME}} Gemini API integration.
+Credit Risk Default Gemini API integration.
 
 OPTIONAL MODULE — remove this file and src/prompts.py if not using Gemini.
 Also remove google-generativeai from pyproject.toml and app/requirements.txt.
 
 Four features:
-  1. explain_prediction()  - plain English explanation for {{PERSONA}}
+  1. explain_prediction()  - plain English explanation for Credit Analyst
   2. chat_with_user()      - conversational Q&A about a prediction
   3. detect_patterns()     - narrative pattern detection across a batch
   4. generate_report()     - executive summary for stakeholders
@@ -62,14 +62,14 @@ def explain_prediction(
     stream: bool = True,
 ):
     """
-    Feature 1: plain English explanation of a prediction for {{PERSONA}}.
+    Feature 1: plain English explanation of a prediction for Credit Analyst.
 
     record: dict of input fields for a single row
     shap_df: DataFrame from src.explain.waterfall_data() for this row
     stream: if True, returns a generator for streaming into Streamlit
 
     TODO: update the call to explanation_prompt() in src/prompts.py
-    with the fields relevant to {{PROJECT_NAME}}.
+    with the fields relevant to Credit Risk Default.
     """
     _require_key()
     prompt = explanation_prompt(record=record, shap_df=shap_df)
@@ -90,7 +90,7 @@ def chat_with_user(
     related_history: list[dict],
 ) -> str:
     """
-    Feature 2: conversational Q&A for {{PERSONA}} reviewing a prediction.
+    Feature 2: conversational Q&A for Credit Analyst reviewing a prediction.
 
     user_message: latest message from the user
     conversation_history: prior messages [{"role": ..., "parts": [...]}]

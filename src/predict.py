@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} inference module.
+Credit Risk Default inference module.
 
 Used by the app to score new data in real time.
 
@@ -31,7 +31,7 @@ def score_tier(prob: float, threshold: float = THRESHOLD) -> str:
     """
     Map a probability to a human-readable score tier.
 
-    TODO: adjust tier boundaries if needed for {{PROJECT_NAME}}.
+    TODO: adjust tier boundaries if needed for Credit Risk Default.
     """
     if prob >= threshold * 1.5:
         return "High"
@@ -62,7 +62,7 @@ def score_batch(csv_path, model) -> pd.DataFrame:
     """
     Score a CSV file end-to-end. Used by the app's batch upload page.
 
-    TODO: update datetime column parsing for {{PROJECT_NAME}}.
+    TODO: update datetime column parsing for Credit Risk Default.
     """
     df = pd.read_csv(csv_path)
     # TODO: parse any datetime columns

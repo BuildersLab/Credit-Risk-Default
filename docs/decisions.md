@@ -1,4 +1,4 @@
-# Decision log: {{PROJECT_NAME}}
+# Decision log: Credit Risk Default
 
 Every significant technical decision is recorded here with context and rationale.
 Add a row every time the team makes a non-obvious choice. Resolved disagreements belong here too.
@@ -7,7 +7,7 @@ Add a row every time the team makes a non-obvious choice. Resolved disagreements
 
 ## Dataset selection
 
-**Decision:** {{DATASET_NAME}}
+**Decision:** Credit risk data - TBD
 **Alternatives considered:** TODO
 **Rationale:** TODO
 
@@ -15,9 +15,9 @@ Add a row every time the team makes a non-obvious choice. Resolved disagreements
 
 ## Primary evaluation metric
 
-**Decision:** {{PRIMARY_METRIC}}
+**Decision:** PR-AUC
 **Alternatives considered:** TODO
-**Rationale:** TODO — explain why this metric fits the class distribution and business goal for {{PROJECT_NAME}}
+**Rationale:** TODO — explain why this metric fits the class distribution and business goal for Credit Risk Default
 
 ---
 
@@ -55,7 +55,7 @@ Add a row every time the team makes a non-obvious choice. Resolved disagreements
 ## Prompts in a separate file
 
 **Decision:** All Gemini prompt templates in `src/prompts.py`
-**Rationale:** {{TEAM_DS}} can iterate on prompts independently from the API code owned by {{TEAM_MLE}}.
+**Rationale:** Bintou Ba, Marienne Dosso, Lynda Allepo can iterate on prompts independently from the API code owned by Divyanshi kashyap.
 
 ---
 

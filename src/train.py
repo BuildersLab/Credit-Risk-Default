@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} model training.
+Credit Risk Default model training.
 
 Trains the champion model on processed features.
 Run via: make train  or  python -m src.train
@@ -66,7 +66,7 @@ def train(X_train, y_train, X_val, y_val, params: dict = CHAMPION_PARAMS):
     )
     val_probs = model.predict_proba(X_val)[:, 1]
     pr_auc = average_precision_score(y_val, val_probs)
-    logger.info("Validation {{PRIMARY_METRIC}}: %.4f", pr_auc)
+    logger.info("Validation PR-AUC: %.4f", pr_auc)
     return model, pr_auc
 
 
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     X_train, X_val, y_train, y_val = load_data()
     model, metric = train(X_train, y_train, X_val, y_val)
     save_model(model)
-    logger.info("Training complete. {{PRIMARY_METRIC}}: %.4f", metric)
+    logger.info("Training complete. PR-AUC: %.4f", metric)

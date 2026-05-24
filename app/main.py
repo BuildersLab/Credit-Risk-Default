@@ -1,5 +1,5 @@
 """
-{{PROJECT_NAME}} dashboard — Streamlit entrypoint.
+Credit Risk Default dashboard — Streamlit entrypoint.
 
 Owner(s):
 """
@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 st.set_page_config(
-    page_title="{{PROJECT_NAME}} | {{COMPANY_NAME}}",
+    page_title="Credit Risk Default | NorthBay Bank TBD",
     page_icon="📊",  # TODO: update icon to match project
     layout="wide",
     initial_sidebar_state="expanded",
@@ -49,8 +49,8 @@ def init_session_state():
 init_session_state()
 
 with st.sidebar:
-    st.markdown("### {{PROJECT_NAME}}")
-    st.markdown("**{{COMPANY_NAME}}**")
+    st.markdown("### Credit Risk Default")
+    st.markdown("**NorthBay Bank TBD**")
     st.divider()
 
     page = st.radio(
