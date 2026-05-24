@@ -1,6 +1,7 @@
 # Data
 data/raw/
 data/processed/
+data/dataset_dictionary/""
 
 # Models
 models/*.pkl
