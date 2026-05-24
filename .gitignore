@@ -12,6 +12,7 @@ wandb/
 # Environment
 .env
 *.env
+venv/
 
 # Python
 __pycache__/
@@ -42,3 +43,6 @@ htmlcov/
 # Replit
 .replit
 replit.nix
+
+# Notes
+notes_nafisat.md
