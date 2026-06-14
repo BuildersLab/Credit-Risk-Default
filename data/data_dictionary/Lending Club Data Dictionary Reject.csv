@@ -1,0 +1,13 @@
+RejectStats File,Description
+Amount Requested,The total amount requested by the borrower
+Application Date,The date which the borrower applied 
+Loan Title,The loan title provided by the borrower
+Risk_Score,"For applications prior to November 5, 2013 the risk score is the borrower's FICO score. For applications after November 5, 2013 the risk score is the borrower's Vantage score."
+Debt-To-Income Ratio,"A ratio calculated using the borrower’s total monthly debt payments on the total debt obligations, excluding mortgage and the requested LC loan, divided by the borrower’s self-reported monthly income."
+Zip Code,The first 3 numbers of the zip code provided by the borrower in the loan application.
+State,The state provided by the borrower in the loan application
+Employment Length,Employment length in years. Possible values are between 0 and 10 where 0 means less than one year and 10 means ten or more years.
+Policy Code,"publicly available policy_code=1
+new products not publicly available policy_code=2"
+,
+,
