@@ -1,0 +1,18 @@
+<svg width="1200" height="260" viewBox="0 0 1200 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#101217"/>
+      <stop offset="55%" stop-color="#1a1210"/>
+      <stop offset="100%" stop-color="#3a1c0c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="86%" cy="12%" r="65%">
+      <stop offset="0%" stop-color="#F05A24" stop-opacity="0.40"/>
+      <stop offset="100%" stop-color="#F05A24" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="260" fill="url(#bg)"/>
+  <rect width="1200" height="260" fill="url(#glow)"/>
+  <text x="60" y="95" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="4" fill="#F05A24">BUILDERSLAB · NORTHBAY BANK</text>
+  <text x="60" y="165" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="800" fill="#ffffff">Credit Risk Default</text>
+  <text x="60" y="208" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#e4e6ebcc">Probability of default scoring for personal loans · XGBoost · calibrated · explainable</text>
+</svg>

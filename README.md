@@ -1,28 +1,32 @@
+![Credit Risk Default](assets/images/readme_banner.svg)
+
 # Credit Risk Default
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Build](https://img.shields.io/badge/Build-Passing-brightgreen)
-![Dataset](https://img.shields.io/badge/Dataset-Credit%20risk%20data%20-%20TBD-orange)
 ![LLM](https://img.shields.io/badge/LLM-Gemini%20API-purple)
+[![Hugging Face Dataset](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/BuildersLab/loan-application-dataset)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-BuildersLab-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/company/builderslabdev)
 
-Build an explainable machine learning credit risk platform for NorthBay Bank that predicts credit card account defaults using behavioural repayment patterns, assists credit officers through an interactive review dashboard, and enables early intervention to reduce financial losses while minimizing unnecessary customer flags.
+Build an explainable machine learning credit risk platform for NorthBay Bank that predicts personal loan application defaults using origination-time borrower and loan characteristics, assists credit officers through an interactive review dashboard, and enables early intervention to reduce financial losses while minimizing unnecessary customer flags.
 
-Built by the BuildersLab team for NorthBay Bank TBD.
+Built by the BuildersLab team for NorthBay Bank, a fictional bank case study.
+
+![App demo: navigating the dashboard, reviewing the model pipeline, and scoring a loan](assets/images/app_demo.gif)
 
 ---
 
 ## What this project does
 
-<!-- Fill in after Week 1. Describe the problem, the system, and the output in 3 to 5 bullet points. -->
-
-- TODO
-- TODO
-- TODO
+- Cleans and target-filters 1.3M+ LendingClub loan records (2007-2018), removing post-origination leakage columns so only information available at application time is used.
+- Engineers features (credit history length, FICO midpoint, affordability ratios, ordinal encodings) and compares six candidate models (Logistic Regression, Random Forest, KNN, XGBoost, LightGBM, CatBoost) on ROC-AUC, the primary metric (see [`docs/decisions.md`](docs/decisions.md)), with PR-AUC and accuracy reported alongside for the ~20% default rate.
+- Explains what drives the model's predictions with SHAP values (global feature importance today; a per-prediction, plain-English rationale via the Gemini API is planned, but not yet connected, advisory only, never the deciding signal, when it lands).
+- Surfaces the model through an interactive Streamlit dashboard where a credit officer scores a loan application, sees the predicted default risk and tier, and records a monitoring decision.
 
 ## Live demo
 
-[Credit-Risk-Default.replit.app](#) — public, no login required
+[portfolio-risk-prediction.streamlit.app](https://portfolio-risk-prediction.streamlit.app/): public, no login required
 
 ---
 
@@ -30,9 +34,9 @@ Built by the BuildersLab team for NorthBay Bank TBD.
 
 | Name | Role |
 |---|---|
-| Nafisat Ibrahim, Marienne Dosso | Project Lead: delivery, stakeholder framing, demo |
-| Bintou Ba, Marienne Dosso, Lynda Allepo | Data Science: EDA, feature engineering, modeling, explainability, documentation |
-| Divyanshi kashyap | ML Engineer: pipeline, API integration, Replit app |
+| Nafisat Ibrahim | Data Scientist & Project Lead |
+| Marienne Dosso | Data Scientist |
+| Bintou Ba | Data Scientist |
 
 ---
 
@@ -44,12 +48,17 @@ cd Credit-Risk-Default
 make setup
 ```
 
-Download the dataset from URL - TBD and place the files in `data/raw/`. See [docs/setup_guide.md](docs/setup_guide.md) for full instructions.
+Data loads directly from Hugging Face inside the notebooks (`datasets.load_dataset("BuildersLab/loan-application-dataset")`), no manual download needed. See [docs/setup_guide.md](docs/setup_guide.md) for full instructions.
+
+The `src/` pipeline scripts (`make data` / `make train` / `make evaluate`) are still under active development and don't yet run end-to-end. The actual working pipeline today is the notebook sequence below, run in order, each one loads its input from Hugging Face and pushes its output back there:
+
+1. `notebooks/00_cleaning.ipynb`, cleaning, target definition, leakage removal
+2. `notebooks/02_feature_engineering.ipynb`, feature engineering, encoding
+3. `notebooks/03_modeling.ipynb`, model comparison, tuning, calibration, the final selected model
+
+The dashboard is fully working and pulls the trained model straight from Hugging Face, no local pipeline run required to use it:
 
 ```bash
-make data      # build features
-make train     # train champion model
-make evaluate  # print metrics report
 make app       # launch dashboard
 ```
 
@@ -64,26 +73,34 @@ Credit-Risk-Default/
 │   ├── processed/            # pipeline outputs, gitignored
 │   └── DATA_CARD.md
 ├── notebooks/
+│   ├── 00_cleaning.ipynb
 │   ├── 01_eda.ipynb
 │   ├── 02_feature_engineering.ipynb
 │   ├── 03_modeling.ipynb
-│   └── 04_explainability.ipynb
+│   ├── 04_explainability.ipynb
+│   └── 10_add_data_to_huggingface.ipynb
+├── outputs/                   # charts, tables, correlation matrices, mirrored to Hugging Face
+├── assets/
+│   └── images/
 ├── src/
-│   ├── data_pipeline.py
-│   ├── features.py
-│   ├── train.py
-│   ├── evaluate.py
-│   ├── explain.py
-│   ├── predict.py
+│   ├── data_pipeline.py       # in progress, not yet functional end-to-end
+│   ├── features.py            # in progress
+│   ├── train.py               # in progress
+│   ├── evaluate.py            # in progress
+│   ├── explain.py             # in progress
+│   ├── predict.py             # in progress
 │   ├── gemini.py             # optional: remove if not using Gemini
-│   └── prompts.py            # optional: remove if not using Gemini
+│   ├── prompts.py            # optional: remove if not using Gemini
+│   ├── upload_to_hf.py               # pushes the raw/cleaned dataset to Hugging Face
+│   ├── upload_model_to_hf.py         # pushes the final model bundle to Hugging Face
+│   └── upload_modeling_outputs_to_hf.py  # pushes charts/tables from 03_modeling.ipynb to Hugging Face
 ├── models/
 │   └── MODEL_CARD.md
 ├── app/
-│   ├── main.py
-│   ├── pages/
-│   ├── components/
-│   └── requirements.txt
+│   ├── app.py                # the working Streamlit dashboard, pulls the model from Hugging Face
+│   ├── requirements.txt
+│   ├── README.md
+│   └── .streamlit/
 ├── tests/
 ├── docs/
 ├── .github/
@@ -96,14 +113,15 @@ Credit-Risk-Default/
 
 ## Key results
 
-> Populated after Week 8 modeling milestone
+Final model: XGBoost, 49 selected features, calibrated (Platt scaling). Test set, 201,802 loans, at the cost-optimal operating threshold (0.155, false negatives weighted 5x a false positive). See [`app/app.py`](app/app.py)'s Project Details page for the full breakdown, SHAP charts, and model comparison.
 
 | Metric | Value |
 |---|---|
-| PR-AUC | TBD |
-| Recall at threshold | TBD |
-| Business impact | TBD |
-| False positive rate | TBD |
+| ROC-AUC | 0.736 |
+| PR-AUC | 0.414 |
+| Recall at threshold | 77.9% |
+| Precision at threshold | 30.2% |
+| False positive rate | 44.9% |
 
 ---
 
