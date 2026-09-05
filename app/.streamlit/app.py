@@ -43,35 +43,6 @@ def load_feature_defaults() -> dict:
         return json.load(f)
 
 
-DATASET_REPO_ID = "BuildersLab/loan-application-dataset"
-
-
-@st.cache_resource
-def download_dataset_file(filename: str) -> str:
-    """Downloads a file from `outputs/` in the HF dataset repo, cached on disk."""
-    cache_dir = Path("/tmp/northbay-dataset-cache")
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    destination = cache_dir / Path(filename).name
-    if not destination.exists():
-        url = f"https://huggingface.co/datasets/{DATASET_REPO_ID}/resolve/main/outputs/{filename}"
-        urlretrieve(url, destination)
-    return str(destination)
-
-
-@st.cache_resource
-def load_experiment_log() -> dict:
-    path = download_dataset_file("modeling_experiment_log.xlsx")
-    return {
-        "comparison": pd.read_excel(path, sheet_name="Comparison"),
-        "hyperparameters": pd.read_excel(path, sheet_name="Hyperparameters"),
-    }
-
-
-@st.cache_resource
-def load_shap_grouped_csv() -> "pd.DataFrame":
-    return pd.read_csv(download_dataset_file("shap_feature_importance_grouped.csv"))
-
-
 def score_loan(bundle: dict, raw_inputs: dict) -> float:
     """Returns the predicted default probability as a percentage (0-100)."""
     row = pd.DataFrame([raw_inputs])[bundle["raw_feature_columns"]]
@@ -247,99 +218,10 @@ LOANS = [
 
 
 TEAM = [
-    {
-        "name": "Nafisat Ibrahim",
-        "role": "Data Scientist & Project Lead",
-        "linkedin": "https://www.linkedin.com/in/nafisatibrahim/",
-        "github": "https://github.com/Nafisatibrahim",
-        "website": "https://nafisatibrahim.com/",
-    },
-    {
-        "name": "Marienne Dosso",
-        "role": "Data Scientist",
-        "linkedin": None,
-        "github": None,
-        "website": None,
-    },
-    {
-        "name": "Bintou Ba",
-        "role": "Data Scientist",
-        "linkedin": None,
-        "github": None,
-        "website": None,
-    },
+    ("Nafisat Ibrahim", "Data Scientist & Project Lead"),
+    ("Marienne Dosso", "Data Scientist"),
+    ("Bintou Ba", "Data Scientist · Secondary Project Lead"),
 ]
-
-
-_ICON_PATHS = {
-    "linkedin": (
-        "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 "
-        "2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 "
-        "4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 "
-        "2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 "
-        "13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 "
-        "24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-    ),
-    "github": (
-        "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 "
-        "0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 "
-        "17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 "
-        "1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 "
-        "1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 "
-        "1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 "
-        "1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 "
-        "2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-    ),
-}
-
-
-def _icon_svg(kind: str, size: int = 18) -> str:
-    if kind in _ICON_PATHS:
-        return f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="currentColor"><path d="{_ICON_PATHS[kind]}"/></svg>'
-    if kind == "website":
-        return (
-            f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-            '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>'
-            '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
-        )
-    if kind == "email":
-        return (
-            f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-            '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>'
-        )
-    return ""
-
-
-def render_social_icons(person: dict) -> str:
-    icons = []
-    for kind, title in [("linkedin", "LinkedIn"), ("github", "GitHub"), ("website", "Website")]:
-        url = person.get(kind)
-        if url:
-            icons.append(f'<a href="{url}" target="_blank" title="{title}" class="nb-icon-link">{_icon_svg(kind)}</a>')
-    return "".join(icons)
-
-
-PROJECT_LINKS = [
-    ("github", "GitHub repository", "https://github.com/BuildersLab/Credit-Risk-Default"),
-    ("linkedin", "LinkedIn", "https://www.linkedin.com/company/builderslabdev"),
-    ("email", "Email the team", "mailto:contact@builderslab.dev"),
-]
-
-
-def render_contact_chips() -> str:
-    chips = []
-    for kind, label, url in PROJECT_LINKS:
-        target = "" if kind == "email" else ' target="_blank"'
-        chips.append(f'<a class="nb-contact-chip" href="{url}"{target}>{_icon_svg(kind)}<span>{label}</span></a>')
-    return "".join(chips)
-
-
-def render_contact_icons_compact() -> str:
-    icons = []
-    for kind, label, url in PROJECT_LINKS:
-        target = "" if kind == "email" else ' target="_blank"'
-        icons.append(f'<a href="{url}"{target} title="{label}" class="nb-icon-link">{_icon_svg(kind, 16)}</a>')
-    return "".join(icons)
 
 
 st.set_page_config(
@@ -348,7 +230,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-NAV_PAGES = ["Home", "Project Details", "Score a loan", "Loan summary"]
+NAV_PAGES = ["Home", "Model results", "Score a loan", "Loan summary"]
 
 
 def apply_visual_theme() -> None:
@@ -654,39 +536,6 @@ def apply_visual_theme() -> None:
             background-color: var(--nb-surface) !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
         }
-
-        .nb-contact-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .5rem .9rem;
-            border-radius: 999px;
-            border: 1px solid var(--nb-border);
-            background: var(--nb-surface);
-            color: var(--nb-text) !important;
-            text-decoration: none !important;
-            font-size: .85rem;
-            font-weight: 600;
-            transition: border-color .2s ease, transform .2s ease;
-        }
-        .nb-contact-chip:hover {
-            border-color: var(--nb-primary);
-            transform: translateY(-1px);
-        }
-
-        .nb-icon-link {
-            color: var(--nb-text-muted) !important;
-            margin-right: 12px;
-            transition: color .2s ease;
-        }
-        .nb-icon-link:hover {
-            color: var(--nb-primary) !important;
-        }
-
-        .nb-header-link {
-            color: inherit;
-            text-decoration: underline;
-        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -705,15 +554,6 @@ def initialize_state() -> None:
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
-
-    # Lets a plain <a href="?page=..."> hyperlink (e.g. the "49" in the Model
-    # Profile card) navigate in-app. Consumed once, then cleared, so a stale
-    # query param in the URL bar doesn't keep overriding later sidebar clicks.
-    query_page = st.query_params.get("page")
-    if query_page in NAV_PAGES:
-        st.session_state.page = query_page
-        del st.query_params["page"]
-
     if st.session_state.page not in NAV_PAGES:
         st.session_state.page = "Home"
 
@@ -730,8 +570,7 @@ def app_header(section: str) -> None:
         (
             '<div class="nb-app-header">'
             f"<span>NORTHBAY BANK / {section.upper()}</span>"
-            '<span><a class="nb-header-link" href="https://github.com/BuildersLab" '
-            'target="_blank">BuildersLab</a> team</span>'
+            "<span>BUILDERSLAB TEAM 03 · TRAINING USE</span>"
             "</div>"
         ),
         unsafe_allow_html=True,
@@ -796,7 +635,7 @@ def most_recent_quarter_end() -> str:
 def render_sidebar() -> None:
     with st.sidebar:
         st.title("NorthBay Bank")
-        st.caption("PORTFOLIO RISK PREDICTION")
+        st.caption("PORTFOLIO RISK DESK")
         pages = NAV_PAGES
         selected = st.radio(
             "Navigate",
@@ -806,10 +645,6 @@ def render_sidebar() -> None:
         if selected != st.session_state.page:
             st.session_state.page = selected
             st.rerun()
-
-        st.divider()
-        st.caption("CONTACT")
-        st.markdown(render_contact_icons_compact(), unsafe_allow_html=True)
 
 
 
@@ -821,12 +656,9 @@ def render_home() -> None:
             <div class="nb-kicker">NORTHBAY BANK · PORTFOLIO INTELLIGENCE</div>
             <div class="nb-hero-title">Loan Default Prediction.</div>
             <p class="nb-hero-copy">
-                NorthBay Bank's portfolio risk team reviews thousands of personal loans,
-                each reduced to a single letter grade that can hide very different
-                underlying risk. This dashboard replaces that flat label with a trained
-                model that estimates each loan's probability of default using information
-                available at application time. It then translates that probability into a
-                risk tier for review (Low, Medium, High).
+                A model-connected decision-support prototype that estimates the
+                probability of loan default from information available at origination.
+                It helps analysts understand risk; it does not automate approval.
             </p>
         </section>
         """,
@@ -835,8 +667,8 @@ def render_home() -> None:
 
     primary, secondary = st.columns(2)
     with primary:
-        if st.button("View project details", type="primary"):
-            navigate("Project Details")
+        if st.button("View model results", type="primary"):
+            navigate("Model results")
     with secondary:
         if st.button("Score an individual loan"):
             navigate("Score a loan")
@@ -845,17 +677,10 @@ def render_home() -> None:
     st.markdown('<span class="nb-section-label">MODEL PROFILE</span>', unsafe_allow_html=True)
     st.header("What is running behind the interface")
     facts = [
-        ("XGBoost", "Model"),
-        (
-            '<a href="?page=Project%20Details" target="_self" style="color:inherit;text-decoration:underline;">49</a>',
-            "Selected features",
-        ),
+        ("XGBoost", "Model family"),
+        ("49", "Selected grouped features"),
         ("0–100%", "Probability output"),
-        (
-            '<a href="https://huggingface.co/BuildersLab/credit-risk-default-model" '
-            'target="_blank" style="color:inherit;text-decoration:underline;">Hugging Face</a>',
-            "Model deployment",
-        ),
+        ("HF Hub", "Model deployment"),
     ]
     render_metric_cards(facts)
 
@@ -864,16 +689,18 @@ def render_home() -> None:
     st.header("Why this project exists")
     first, second = st.columns(2)
     with first:
-        st.subheader("Business Problem")
+        st.subheader("The business problem")
         st.write(
-            "A letter grade can hide real differences in risk. Two loans in the "
-            "same grade may still have very different chances of default."
+            "Traditional grades compress risk into broad categories. Loans in the "
+            "same grade can still have materially different estimated default "
+            "probabilities, making prioritization and portfolio review harder."
         )
     with second:
-        st.subheader("Solution")
+        st.subheader("The model output")
         st.write(
-            "The model scores each loan with a precise default probability, "
-            "then sorts it into a Low, Medium, or High tier for review."
+            "The trained model returns a continuous probability of default. "
+            "Configurable business thresholds translate that probability into "
+            "Low, Medium, or High monitoring tiers for human review."
         )
 
     st.markdown('<span class="nb-section-label">MODEL EVALUATION</span>', unsafe_allow_html=True)
@@ -892,33 +719,40 @@ def render_home() -> None:
     st.header("How a loan moves through the prototype")
     flow = st.columns(4)
     steps = [
-        ("01 · Enter", "Enter the borrower's loan details."),
-        ("02 · Score", "The model estimates the default probability."),
-        ("03 · Interpret", "Review the risk tier and what's driving it."),
-        ("04 · Decide", "A person decides what happens next."),
+        ("01 · Enter", "Provide origination-time borrower and loan information."),
+        ("02 · Score", "The deployed XGBoost model estimates default probability."),
+        ("03 · Interpret", "Review the tier, thresholds, inputs, and model drivers."),
+        ("04 · Decide", "A human records the appropriate monitoring response."),
     ]
     for column, (title, body) in zip(flow, steps):
         with column:
             with st.container(border=True):
                 st.subheader(title)
                 st.write(body)
+    st.warning(
+        "The deterministic ML model is the auditable system of record. "
+        "Any future language-model explanation will be assistive only."
+    )
 
     st.markdown('<span class="nb-section-label">THE TEAM</span>', unsafe_allow_html=True)
-    st.header("BuildersLab Team")
+    st.header("BuildersLab Team 03")
     team_columns = st.columns(3)
-    for column, person in zip(team_columns, TEAM):
+    for column, (name, role) in zip(team_columns, TEAM):
         with column:
             with st.container(border=True):
-                st.subheader(person["name"])
-                st.caption(person["role"].upper())
-                icons_html = render_social_icons(person)
-                if icons_html:
-                    st.markdown(f'<div style="margin-top:.6rem;">{icons_html}</div>', unsafe_allow_html=True)
+                st.subheader(name)
+                st.caption(role.upper())
 
     st.header("Project contact")
-    st.markdown(
-        f'<div style="display:flex;gap:.75rem;flex-wrap:wrap;">{render_contact_chips()}</div>',
-        unsafe_allow_html=True,
+    contact_columns = st.columns(3)
+    contact_columns[0].link_button(
+        "GitHub repository", "https://github.com/BuildersLab/Credit-Risk-Default"
+    )
+    contact_columns[1].link_button(
+        "LinkedIn", "https://www.linkedin.com/company/builderslabdev"
+    )
+    contact_columns[2].link_button(
+        "Email the team", "mailto:contact@builderslab.dev"
     )
     st.caption(
         "NorthBay Bank, its portfolio, people, and events are fictional and "
@@ -955,259 +789,43 @@ def render_threshold_settings() -> None:
             st.rerun()
 
 
-def render_project_details() -> None:
-    app_header("Project details")
-    st.title("How this model was built.")
+def render_portfolio() -> None:
+    app_header("Model results / 01")
+    st.title("Model evaluation results.")
     st.write(
-        "The full pipeline: data cleaning, feature engineering, model development, "
-        "feature selection, and the final evaluated result. Every chart and number "
-        "below is pulled live from the project's Hugging Face repositories, the "
-        "same artifacts produced by the notebooks in this project."
+        "This page is reserved for the final charts, tables, and interpretation "
+        "from the model evaluation package you will upload."
+    )
+    st.info(
+        "Placeholders are intentional. They avoid presenting invented values as "
+        "validated model performance."
     )
 
-    try:
-        bundle = load_model_bundle()
-    except Exception as exc:
-        st.error(f"Project data isn't available right now ({exc}).")
-        st.stop()
-
-    # ---------------------------------------------------------------- Overview
-    st.markdown('<span class="nb-section-label">OVERVIEW</span>', unsafe_allow_html=True)
-    st.header("The data")
-    st.write(
-        "LendingClub accepted personal loans, 2007-2018 (Kaggle `wordsforthewise/lending-club`, "
-        "CC0, hosted on Hugging Face). Starting from 1,345,350 resolved loans (fully paid or "
-        "charged off, unresolved loans excluded from the target), split 70/15/15 by stratified "
-        "sampling."
-    )
-    render_metric_cards(
-        [
-            ("941,744", "Train rows"),
-            ("201,803", "Validation rows"),
-            ("201,802", "Test rows"),
-            ("~20%", "Default rate"),
-        ]
-    )
-    try:
-        st.image(download_dataset_file("target_distribution.png"), width="stretch")
-    except Exception:
-        pass
-
-    # ----------------------------------------------------------- Data Cleaning
-    st.divider()
-    st.markdown('<span class="nb-section-label">DATA CLEANING</span>', unsafe_allow_html=True)
-    st.header("Cleaning and leakage removal")
-    st.write(
-        "Every raw column was manually reviewed for two things: how much of it was actually "
-        "missing, and whether it could only be known after the loan was already funded "
-        "(payment history, collections activity, recoveries, and similar fields), which would "
-        "leak the outcome into the model. Columns that failed either check were dropped or "
-        "flagged before any modeling started."
-    )
-    clean_cols = st.columns(3)
-    clean_cols[0].markdown("**Duplicate rows**\n\n0 found.")
-    clean_cols[1].markdown("**Blank rows**\n\n18 rows entirely empty across every column, dropped.")
-    clean_cols[2].markdown(
-        "**Missing values**\n\nMedian fill for low-missingness columns; median/mode plus a "
-        "`_missing` indicator flag where missingness itself carries signal (event-based or "
-        "temporal-coverage gaps). Fit on train only, applied identically to val/test."
-    )
-    st.caption(
-        "Full column-by-column keep/drop reasoning and imputation strategy: "
-        "[missing_and_leakage_manual_review.csv](https://huggingface.co/datasets/BuildersLab/loan-application-dataset/blob/main/data_dictionary/missing_and_leakage_manual_review.csv) "
-        "and [missing_values_decisions.xlsx](https://huggingface.co/datasets/BuildersLab/loan-application-dataset/blob/main/data_dictionary/missing_values_decisions.xlsx)."
-    )
-
-    # ------------------------------------------------------- Feature Engineering
-    st.divider()
-    st.markdown('<span class="nb-section-label">FEATURE ENGINEERING</span>', unsafe_allow_html=True)
-    st.header("Derived features and encoding")
-    st.write(
-        "A handful of new variables were engineered from the cleaned raw columns: `fico_score` "
-        "(midpoint of the reported FICO range), `credit_history_months`, `emp_length_years`, and "
-        "`term_months` (parsed from text like \"36 months\"). Two ratio features, `loan_to_income` "
-        "and `installment_to_income`, originally produced infinite values for a small number of "
-        "zero-income rows, that divide-by-zero was fixed and both ratios were winsorized at the "
-        "99.9th percentile to control the remaining extreme outliers."
-    )
-    st.write(
-        "For modeling, numeric columns were standard-scaled and categorical columns were "
-        "one-hot encoded (fit on train only), turning 107 raw feature columns into 180 encoded "
-        "columns."
-    )
-    try:
-        st.image(download_dataset_file("feature_correlation_matrix.png"), width="stretch", caption="Feature-to-feature correlation, full engineered feature set")
-    except Exception:
-        pass
-
-    # ------------------------------------------------------- Model Development
-    st.divider()
-    st.markdown('<span class="nb-section-label">MODEL DEVELOPMENT</span>', unsafe_allow_html=True)
-    st.header("What was tried")
-    st.write(
-        "**PR-AUC** was used as the primary metric instead of ROC-AUC or accuracy, with only "
-        "~20% of loans defaulting, accuracy is easy to game by predicting the majority class, "
-        "and PR-AUC is more sensitive to performance on the minority (default) class specifically."
-    )
-    st.write(
-        "Six baseline models were compared (Logistic Regression, Random Forest, KNN, XGBoost, "
-        "LightGBM, CatBoost), all with class-imbalance correction (`class_weight=\"balanced\"` or "
-        "`scale_pos_weight`). The strongest, XGBoost, was then hyperparameter-tuned with "
-        "`RandomizedSearchCV`. Several alternative strategies for the class imbalance were also "
-        "tried head-to-head against the tuned model: resampling (SMOTE, random oversampling, "
-        "random undersampling), a custom cost-sensitive training objective, and ensembling "
-        "(a simple blend and a stacked meta-model). None beat the single tuned, reweighted "
-        "XGBoost model."
-    )
-    try:
-        exp_log = load_experiment_log()
-        comparison_df = exp_log["comparison"].sort_values("pr_auc", ascending=False).reset_index(drop=True)
-        st.dataframe(comparison_df, width="stretch", hide_index=True)
-        st.caption("Validation-set results for every model tried, sorted by PR-AUC (higher is better).")
-    except Exception as exc:
-        st.warning(f"Model comparison table isn't available right now ({exc}).")
-
-    # ------------------------------------------------------- Feature Selection
-    st.divider()
-    st.markdown('<span class="nb-section-label">FEATURE SELECTION</span>', unsafe_allow_html=True)
-    st.header("Why 49 features")
-    st.write(
-        "SHAP importance was computed for the full-feature champion model, then one-hot dummy "
-        "columns were grouped back to their original variable (so `addr_state`'s 51 encoded "
-        "columns count as one variable, not 51 separate tiny ones). Cutting the feature set to "
-        "the top variables by cumulative SHAP importance was tested at several sizes:"
-    )
-
-    reduced_comparison = pd.DataFrame(
-        [
-            {"Feature set": "Full model", "Variables": 107, "Encoded columns": 180, "PR-AUC (val)": 0.4195},
-            {"Feature set": "Top 49 (chosen)", "Variables": 49, "Encoded columns": 119, "PR-AUC (val)": 0.4166},
-            {"Feature set": "Top 36", "Variables": 36, "Encoded columns": 106, "PR-AUC (val)": 0.4141},
-            {"Feature set": "Top 16", "Variables": 16, "Encoded columns": 86, "PR-AUC (val)": 0.4000},
-        ]
-    )
-    st.dataframe(reduced_comparison, width="stretch", hide_index=True)
-    st.write(
-        "49 was the sweet spot: within 0.003 PR-AUC of the full model (well within noise), "
-        "while 36 already cost more than double that gap for barely fewer encoded columns, and "
-        "16 was a real, noticeable drop. Fewer, real-world variables also make the model far "
-        "easier to explain to a credit officer, or to a rejected applicant, than 180 anonymous "
-        "encoded columns."
-    )
-
-    try:
-        shap_grouped_df = load_shap_grouped_csv()
-        for pct in (50, 80, 90, 95):
-            n = int((shap_grouped_df["cumulative_pct"] < pct).sum()) + 1
-            st.caption(f"Top {n} variables explain {pct}%+ of total SHAP importance (full model).")
-    except Exception:
-        pass
-
-    shap_cols = st.columns(2)
-    try:
-        with shap_cols[0]:
-            st.image(download_dataset_file("shap_summary.png"), width="stretch", caption="SHAP summary, full model")
-        with shap_cols[1]:
-            st.image(download_dataset_file("shap_importance_grouped.png"), width="stretch", caption="Grouped importance, full model")
-    except Exception:
-        pass
-
-    # ------------------------------------------------------------ Final Result
-    st.divider()
-    st.markdown('<span class="nb-section-label">FINAL RESULT</span>', unsafe_allow_html=True)
-    st.header("The winner: XGBoost, 49 features, calibrated")
-    st.write(
-        "The deployed model is the tuned XGBoost, retrained on the 49 selected variables "
-        "(119 encoded columns), with its probabilities post-hoc calibrated (Platt scaling). "
-        "Calibration matters because `scale_pos_weight` fixes ranking and recall but inflates "
-        "the raw probability values, on the test set, calibration cut the Brier score (lower is "
-        "better) from 0.2062 to 0.1407, better than the ~0.16 you'd get by always guessing the "
-        "base default rate. PR-AUC is unchanged by calibration (0.4140 either way), by design, "
-        "it's a purely rank-preserving transformation."
-    )
-
-    final_metrics = [
-        ("0.414", "PR-AUC (test)"),
-        ("0.736", "ROC-AUC (test)"),
-        (f"{bundle['operating_threshold']:.3f}", "Operating threshold"),
-        ("0.141", "Brier score (test)"),
+    first, second = st.columns(2)
+    placeholders = [
+        (first, "Discrimination", "ROC curve and ROC-AUC", "How well the model ranks defaults above non-defaults."),
+        (second, "Precision and recall", "PR curve and PR-AUC", "Performance when the default class is less common."),
+        (first, "Threshold performance", "Confusion matrix", "Precision, recall, specificity, and error counts at the chosen threshold."),
+        (second, "Probability quality", "Calibration curve", "Whether predicted probabilities align with observed default frequency."),
+        (first, "Model understanding", "Feature importance", "Global SHAP importance and grouped feature contributions."),
+        (second, "Robustness", "Segment results", "Performance by grade, purpose, amount band, or other approved segments."),
     ]
-    render_metric_cards(final_metrics)
-
-    st.write(
-        f"The operating threshold ({bundle['operating_threshold']:.3f}) is cost-optimal, not "
-        "F1-optimal: missing an actual default (a false negative) was weighted 5x more costly "
-        "than a false alarm, and F1 itself happens to peak at the same point, so this isn't a "
-        "tradeoff against F1, both objectives agree. At this threshold on test: **precision "
-        "0.302, recall 0.779, F1 0.435**, catching about 78% of actual defaults, at the cost of "
-        "flagging a lot of loans that don't actually default (precision well below 1)."
-    )
-
-    eval_cols = st.columns(2)
-    try:
-        with eval_cols[0]:
-            st.image(download_dataset_file("xgboost_(tuned)_eval.png"), width="stretch", caption="Full-feature champion, evaluation curves")
-        with eval_cols[1]:
-            st.image(download_dataset_file("xgboost_(top_49_grouped_features)_eval.png"), width="stretch", caption="Final model (49 features), evaluation curves")
-    except Exception:
-        pass
-
-    calib_cols = st.columns(2)
-    try:
-        with calib_cols[0]:
-            st.image(download_dataset_file("final_calibration_curve.png"), width="stretch", caption="Calibration curve, before vs. after")
-        with calib_cols[1]:
-            st.image(download_dataset_file("final_threshold_sweep.png"), width="stretch", caption="Precision / recall / F1 vs. threshold")
-    except Exception:
-        pass
-
-    with st.expander("Confusion matrix at the operating threshold (test set, 201,802 loans)"):
-        cm_df = pd.DataFrame(
-            [[88_962, 72_550], [8_905, 31_385]],
-            index=["Actual: Not default", "Actual: Default"],
-            columns=["Predicted: Not default", "Predicted: Default"],
-        )
-        st.dataframe(cm_df, width="stretch")
-
-    try:
-        st.image(
-            download_dataset_file("final_feature_correlation_matrix.png"),
-            width="stretch",
-            caption="Feature-to-feature correlation, numeric subset of the final 49 selected variables",
-        )
-    except Exception:
-        pass
-
-    # -------------------------------------------------------- Selected Features
-    st.divider()
-    st.markdown('<span class="nb-section-label">SELECTED FEATURES</span>', unsafe_allow_html=True)
-    st.header("All 49 selected features")
-    st.write(
-        "The model's actual inputs, ranked most to least important by SHAP, with plain-language "
-        "field names and descriptions."
-    )
-
-    features_df = pd.DataFrame(bundle["feature_list"])
-    features_df.insert(0, "Rank", range(1, len(features_df) + 1))
-    features_df["Field"] = features_df["Variable"].map(lambda v: FIELD_LABELS.get(v, v.replace("_", " ").title()))
-    features_df = features_df[["Rank", "Field", "Variable", "Dtype", "Description", "mean_abs_shap", "cumulative_pct"]]
-    features_df = features_df.rename(
-        columns={
-            "Variable": "Raw column",
-            "Dtype": "Type",
-            "mean_abs_shap": "Mean |SHAP|",
-            "cumulative_pct": "Cumulative importance (%)",
-        }
-    )
-
-    search = st.text_input("Search features", placeholder="Field name, raw column, or description")
-    if search:
-        mask = features_df.apply(lambda row: search.lower() in " ".join(str(v) for v in row).lower(), axis=1)
-        features_df = features_df[mask]
-
-    st.dataframe(features_df, width="stretch", hide_index=True)
+    for column, eyebrow, title, description in placeholders:
+        with column:
+            with st.container(border=True):
+                st.caption(eyebrow.upper())
+                st.subheader(title)
+                st.write(description)
+                st.markdown('<div class="nb-placeholder-pulse"></div>', unsafe_allow_html=True)
+                st.caption("AWAITING UPLOADED RESULT")
 
     st.divider()
+    st.subheader("What to upload")
+    st.write(
+        "Recommended: evaluation metric table, ROC and precision-recall curves, "
+        "confusion matrix, calibration plot, SHAP summary, and any approved "
+        "segment-level validation."
+    )
     if st.button("Continue to loan scoring", type="primary"):
         navigate("Score a loan")
 
@@ -1468,8 +1086,8 @@ render_sidebar()
 
 if st.session_state.page == "Home":
     render_home()
-elif st.session_state.page == "Project Details":
-    render_project_details()
+elif st.session_state.page == "Model results":
+    render_portfolio()
 elif st.session_state.page == "Score a loan":
     render_score()
 else:
